@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+    
+    accounts:
+        image: vishnub5329/accounts:latest
+        mem_limit: 700m
+        ports:
+            - "8081:8081"
+        networks:
+            - vizz-networks
+            
+    loans:
+        image: vishnub5329/loans:latest
+        mem_limit: 700m
+        ports:
+            - "8090:8090"
+        networks:
+            - vizz-networks
+    cards:
+        image: vishnub5329/cards
+        mem_limit: 700m
+        ports:
+            - "9000:9000:
+        networks:
+            - vizz-networks
+            
+            
+networks:
+   vizz-networks:
