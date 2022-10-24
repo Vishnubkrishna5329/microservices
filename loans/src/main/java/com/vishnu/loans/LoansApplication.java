@@ -8,9 +8,9 @@ import org.springframework.context.annotation.ComponentScans;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScans({ @ComponentScan("com.eazybytes.loans.controller") })
-@EnableJpaRepositories("com.eazybytes.loans.repository")
-@EntityScan("com.eazybytes.loans.model")
+@ComponentScans({ @ComponentScan("com.vishnu.loans.controller") })
+@EnableJpaRepositories("com.vishnu.loans.repository")
+@EntityScan("com.vishnu.loans.model")
 public class LoansApplication {
 
 	public static void main(String[] args) {

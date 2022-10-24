@@ -8,13 +8,15 @@ import org.springframework.context.annotation.ComponentScans;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScans({ @ComponentScan("com.eazybytes.cards.controller") })
-@EnableJpaRepositories("com.eazybytes.cards.repository")
-@EntityScan("com.eazybytes.cards.model")
+@ComponentScans({ @ComponentScan("com.vishnu.cards.controller") })
+@EnableJpaRepositories("com.vishnu.cards.repository")
+@EntityScan("com.vishnu.cards.model")
 public class CardsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CardsApplication.class, args);
 	}
+
+	
 
 }
