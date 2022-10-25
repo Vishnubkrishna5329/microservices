@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+
+    configserver:
+        image: vishnub5329/configserver:latest
+        mem_limit: 700m
+        ports:
+            - "8073:8073"
+    
+    accounts:
+        image: vishnub5329/accounts:latest
+        mem_limit: 700m
+        ports:
+            - "8083:8083"
+        depends_on: 
+            - configserver    
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 120s
+        environment:
+            SPRING_PROFILES_ACTIVE: dev
+            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+            
+    loans:
+        image: vishnub5329/loans:latest
+        mem_limit: 700m
+        ports:
+            - "8093:8093"
+        depends_on: 
+            - configserver
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 120s
+        environment:
+            SPRING_PROFILES_ACTIVE: dev
+            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+            
+    cards:
+        image: vishnub5329/cards
+        mem_limit: 700m
+        ports:
+            - "9003:9003"
+        depends_on:
+            - configserver
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 120s
+        environment:
+            SPRING_PROFILES_ACTIVE: dev
+            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+            
+            
