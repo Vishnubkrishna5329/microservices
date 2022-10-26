@@ -7,6 +7,26 @@ services:
         mem_limit: 700m
         ports:
             - "8071:8071"
+            
+    eurekaserver:
+        image: vishnub5329/eurekaserver:latest
+        mem_limit: 700m
+        ports:
+            - "8070:8070"
+        depends_on: 
+                - configserver
+        deploy: 
+            restart_policy:
+                condition: on-failure
+                delay: 15s
+                max_attempts: 3
+                window: 120s
+        environment:
+            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+            SPRING_PROFILES_ACTIVE: default
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
+            
+               
     
     accounts:
         image: vishnub5329/accounts:latest
@@ -14,16 +34,37 @@ services:
         ports:
             - "8082:8082"
         depends_on: 
-            - configserver    
+            - configserver
+            - eurekaserver
         deploy:
             restart_policy:
                 condition: on-failure
-                delay: 5s
+                delay: 30s
                 max_attempts: 3
                 window: 120s
         environment:
             SPRING_PROFILES_ACTIVE: default
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
+                   
+    accounts1:
+        image: vishnub5329/accounts:latest
+        mem_limit: 700m
+        ports:
+            - "8083:8082"
+        depends_on: 
+            - configserver
+            - eurekaserver
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 30s
+                max_attempts: 3
+                window: 120s
+        environment:
+            SPRING_PROFILES_ACTIVE: default
+            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka        
             
     loans:
         image: vishnub5329/loans:latest
@@ -32,15 +73,17 @@ services:
             - "8091:8091"
         depends_on: 
             - configserver
+            - eurekaserver
         deploy:
             restart_policy:
                 condition: on-failure
-                delay: 5s
+                delay: 30s
                 max_attempts: 3
                 window: 120s
         environment:
             SPRING_PROFILES_ACTIVE: default
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             
     cards:
         image: vishnub5329/cards
@@ -49,14 +92,16 @@ services:
             - "9002:9002"
         depends_on:
             - configserver
+            - eurekaserver
         deploy:
             restart_policy:
                 condition: on-failure
-                delay: 5s
+                delay: 30s
                 max_attempts: 3
                 window: 120s
         environment:
             SPRING_PROFILES_ACTIVE: default
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             
             

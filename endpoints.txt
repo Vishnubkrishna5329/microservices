@@ -16,3 +16,5 @@ http://localhost:8090/myLoans
 Cards
 http://localhost:9002/cards/properties
 
+Eureka apps details
+http://localhost:8070/eureka/apps/accounts
