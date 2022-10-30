@@ -104,4 +104,28 @@ services:
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             
+                
+    gatewayserver:
+        image: vishnub5329/gatewayserver
+        mem_limit: 700m
+        ports:
+            - "8060:8060"
+        depends_on: 
+            - configserver
+            - eurekaserver
+            - accounts
+            - cards
+            - loans
+        deploy:
+            restart_policy:
+              condition: on-failure
+              delay: 30s
+              max_attempts: 3
+              window: 120s
+        environment:
+           SPRING_PROFILES_ACTIVE: default
+           SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
+           EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka            
+                        
+                        
             

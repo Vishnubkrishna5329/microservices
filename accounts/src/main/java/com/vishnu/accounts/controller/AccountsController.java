@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,7 +29,6 @@ import com.vishnu.accounts.service.clients.LoansFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 
-
 @RestController
 public class AccountsController {
 
@@ -37,10 +37,10 @@ public class AccountsController {
 
 	@Autowired
 	private AccountServiceConfig accountConfig;
-	
+
 	@Autowired
 	private LoansFeignClient loansFeignClient;
-	
+
 	@Autowired
 	private CardsFeignClient cardsFeignClient;
 
@@ -61,32 +61,35 @@ public class AccountsController {
 		ObjectWriter obj = new ObjectMapper().writer().withDefaultPrettyPrinter();
 		AccountsProperties properties = new AccountsProperties(accountConfig.getMsg(), accountConfig.getBuildVersion(),
 				accountConfig.getMailDetails(), accountConfig.getActiveBranches());
-		String jsonStr= obj.writeValueAsString(properties);
+		String jsonStr = obj.writeValueAsString(properties);
 		return jsonStr;
 
 	}
-	
+
 	@PostMapping("/customerDetails")
-	//@CircuitBreaker(name="detailsForCustomerSupportApp",fallbackMethod = "myCustomerFallBack")
-	@Retry(name="retryForCustomerDetails",fallbackMethod = "myCustomerFallBack")
-	public CustomerDetails getCustomerDetails(@RequestBody Customer customer) {
+	@CircuitBreaker(name = "detailsForCustomerSupportApp", fallbackMethod = "myCustomerFallBack")
+	// @Retry(name = "retryForCustomerDetails", fallbackMethod =
+	// "myCustomerFallBack")
+	public CustomerDetails getCustomerDetails(@RequestHeader("vizzbank-correlation-id") String correlationId,
+			@RequestBody Customer customer) {
 
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
-		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
-		List<Cards> cardDetails = cardsFeignClient.getCardDetails(customer);
-		
-		CustomerDetails customerDetails= new CustomerDetails();
+		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);
+		List<Cards> cardDetails = cardsFeignClient.getCardDetails(correlationId, customer);
+
+		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
 		customerDetails.setCards(cardDetails);
 		customerDetails.setLoans(loansDetails);
 		return customerDetails;
-		
+
 	}
-	
-	private CustomerDetails myCustomerFallBack(Customer customer, Throwable t) {
+
+	private CustomerDetails myCustomerFallBack(@RequestHeader("vizzbank-correlation-id") String correlationId,
+			Customer customer, Throwable t) {
 		Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId());
-		List<Loans> loansDetails = loansFeignClient.getLoansDetails(customer);
-		CustomerDetails customerDetails= new CustomerDetails();
+		List<Loans> loansDetails = loansFeignClient.getLoansDetails(correlationId, customer);
+		CustomerDetails customerDetails = new CustomerDetails();
 		customerDetails.setAccounts(accounts);
 		customerDetails.setLoans(loansDetails);
 		return customerDetails;
