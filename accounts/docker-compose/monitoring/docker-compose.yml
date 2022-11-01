@@ -2,13 +2,35 @@ version: "3.8"
 
 services:
 
+    grafana:
+        image: "grafana/grafana:latest"
+        ports: 
+            - "3000:3000"
+        environment:
+            - GF_SECURITY_ADMIN_USER=admin
+            - GF_SECURITY_ADMIN_PASSWORD=password
+        depends_on:
+            - prometheus
+        networks:
+            - monitoring_default    
+        
+    prometheus:
+        image: prom/prometheus:latest
+        ports:
+            - "9090:9090"
+        volumes:
+            - ./prometheus.yml:/etc/prometheus/prometheus.yml
+        networks:
+            - monitoring_default
    
     zipkin: 
-      image: openzipkin/zipkin
-      mem_limit: 700m
-      ports:
+        image: openzipkin/zipkin
+        mem_limit: 700m
+        ports:
         - "9411:9411"
-
+        networks:
+            - monitoring_default
+     
     configserver:
         image: vishnub5329/configserver:latest
         mem_limit: 700m
@@ -20,7 +42,9 @@ services:
         environment:
           SPRING_PROFILES_ACTIVE: default
           SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
-                    
+        networks:
+            - monitoring_default
+            
     eurekaserver:
         image: vishnub5329/eurekaserver:latest
         mem_limit: 700m
@@ -39,7 +63,8 @@ services:
             SPRING_PROFILES_ACTIVE: default
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
-               
+        networks:
+            - monitoring_default       
     
     accounts:
         image: vishnub5329/accounts:latest
@@ -60,7 +85,9 @@ services:
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             SPRING_ZIPKIN_BASEURL: http://zipkin:9411/       
-    
+        networks:
+            - monitoring_default
+        
     accounts1:
         image: vishnub5329/accounts:latest
         mem_limit: 700m
@@ -80,7 +107,9 @@ services:
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka        
             SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
-  
+        networks:
+            - monitoring_default
+            
     loans:
         image: vishnub5329/loans:latest
         mem_limit: 700m
@@ -100,7 +129,9 @@ services:
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
-    
+        networks:
+            - monitoring_default
+        
     cards:
         image: vishnub5329/cards
         mem_limit: 700m
@@ -120,7 +151,9 @@ services:
             SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
             EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka
             SPRING_ZIPKIN_BASEURL: http://zipkin:9411/
-                
+        networks:
+            - monitoring_default
+            
     gatewayserver:
         image: vishnub5329/gatewayserver
         mem_limit: 700m
@@ -142,6 +175,9 @@ services:
            SPRING_PROFILES_ACTIVE: default
            SPRING_CONFIG_IMPORT: configserver:http://configserver:8071
            EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eurekaserver:8070/eureka            
-           SPRING_ZIPKIN_BASEURL: http://zipkin:9411/             
+           SPRING_ZIPKIN_BASEURL: http://zipkin:9411/ 
+        networks:
+            - monitoring_default    
                         
-            
+networks:
+        monitoring_default:

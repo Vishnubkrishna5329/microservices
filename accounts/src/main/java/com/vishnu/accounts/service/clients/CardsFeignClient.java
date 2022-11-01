@@ -17,5 +17,5 @@ import com.vishnu.accounts.model.Customer;
 public interface CardsFeignClient {
 
 	@PostMapping(value="/myCards",consumes=MediaType.APPLICATION_JSON)
-	public List<Cards> getCardDetails(@RequestHeader("vizzbank-correlation-id") String correlationId, @RequestBody Customer customer);
+	public List<Cards> getCardDetails( @RequestBody Customer customer);
 }
