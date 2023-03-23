@@ -1,0 +1,21 @@
+
+deploymentName: accounts-deployment
+deploymentLabel: accounts
+
+replicaCount: 1
+
+image:
+    repository: vishnub5329/accounts
+    tag: latest
+        
+containerPort: 8080
+
+service:
+    type: LoadBalancer
+    port: 8082
+    targetPort: 8082 
+    
+zipkin_enabled: true
+profile_enabled: true
+eureka_enabled: true
+config_enabled: true    

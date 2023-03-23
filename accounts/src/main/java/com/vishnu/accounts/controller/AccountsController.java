@@ -99,4 +99,8 @@ public class AccountsController {
 		return customerDetails;
 	}
 
+	@GetMapping("/hello")
+	public String helloMsg(String msg) {
+		return "Hello from latest image";
+	}
 }

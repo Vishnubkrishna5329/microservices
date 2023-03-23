@@ -1,0 +1,6 @@
+dependencies:
+- name: vishnubkrishna-common
+  repository: file://../../vishnubkrishna-common
+  version: 0.1.0
+digest: sha256:fc293b0317149cf125e922da0bbf687adcf2722a5dd3da0b6f47558580f18fab
+generated: "2023-03-22T23:27:34.3275515+05:30"

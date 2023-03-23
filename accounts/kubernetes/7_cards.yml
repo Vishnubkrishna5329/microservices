@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cards-deployment
+  labels:
+    app: cards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cards
+  template:
+    metadata:
+      labels:
+        app: cards
+    spec:
+      containers:
+      - name: cards
+        image: vishnub5329/cards:latest
+        ports:
+        - containerPort: 9002
+        env:
+                        - name: SPRING_ZIPKIN_BASEURL
+                          valueFrom:
+                            configMapKeyRef:
+                              name: vishnubkrishna-configmap
+                              key: SPRING_ZIPKIN_BASEURL
+                              
+                        - name: SPRING_PROFILES_ACTIVE
+                          valueFrom:
+                            configMapKeyRef:
+                                name: vishnubkrishna-configmap
+                                key: SPRING_PROFILES_ACTIVE
+                        
+                        - name: SPRING_CONFIG_IMPORT
+                          valueFrom:
+                            configMapKeyRef:
+                                name: vishnubkrishna-configmap
+                                key: SPRING_CONFIG_IMPORT
+                                
+                        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+                          valueFrom:
+                            configMapKeyRef:
+                                name: vishnubkrishna-configmap
+                                key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cards-service
+spec:
+  selector:
+    app: cards
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 9002
+      targetPort: 9002

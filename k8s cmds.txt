@@ -1,0 +1,95 @@
+To create a deployment/service/configmap based on a given YAML file
+-------------------------------------------------------------------
+kubectl apply -f filename
+
+To get all the components inside your cluster
+---------------------------------------------
+kubectl get all
+
+To get all the pods details inside your cluster
+-----------------------------------------------
+kubectl get pods
+
+To get the details of a given pod id
+------------------------------------	
+kubectl get pod pod-id
+
+To get more details of a given pod id
+-------------------------------------
+kubectl describe pod pod-id
+
+To delete a given pod from cluster
+----------------------------------
+kubectl delete pod pod-id
+
+To get all the services details inside your cluster
+---------------------------------------------------
+kubectl get services
+
+To get the details of a given service id
+----------------------------------------	
+kubectl get service service-id
+
+To get more details of a given service id
+-----------------------------------------	
+kubectl describe service service-id	
+
+To get all the node details inside your cluster
+-----------------------------------------------
+kubectl get nodes	
+
+To get the details of a given node
+----------------------------------
+kubectl get node node-id	
+
+To get all the replica sets details inside your cluster
+-------------------------------------------------------
+kubectl get replicasets
+
+To get the details of a given replicaset
+----------------------------------------	
+kubectl get replicaset replicaset-id	
+
+To get all the deployments details inside your cluster
+------------------------------------------------------
+kubectl get deployments
+
+To get the details of a given deployment
+---------------------------------------	
+kubectl get deployment deployment-id
+
+To get all the configmap details inside your cluster
+----------------------------------------------------	
+kubectl get configmaps
+
+To get the details of a given configmap
+--------------------------------------	
+kubectl get configmap configmap-id
+
+To get all the events occured inside your cluster
+-------------------------------------------------	
+kubectl get events --sort-by=.metadata.creationTimestamp
+
+To increase the number of replicas for a deployment inside your cluster
+-----------------------------------------------------------------------	
+kubectl scale deployment accounts-deployment --replicas=3	
+
+To set a new image for a deployment inside your cluster
+------------------------------------------------------
+kubectl set image deployment accounts-deployment accounts=eazybytes/accounts:k8s	
+
+To know the rollout history for a deployment inside your cluster
+----------------------------------------------------------------
+kubectl rollout history deployment accounts-deployment	
+
+To rollback to a given revision for a deployment inside your cluster
+--------------------------------------------------------------------
+kubectl rollout undo deployment accounts-deployment --to-revision=1	
+
+To create automatic scaling using HPA for a deployment inside your cluster
+--------------------------------------------------------------------------
+kubectl autoscale deployment accounts-deployment --min=3 --max=10 --cpu-percent=70	
+
+To get a logs of a given node inside your cluster
+-------------------------------------------------
+kubectl logs node-id	

@@ -1,0 +1,87 @@
+To generate a docker image based on a Dockerfile
+------------------------------------------------
+docker build . -t eazybytes/accounts
+
+To start a docker container based on a given image
+--------------------------------------------------
+docker run -p 8081:8080 eazybytes/accounts	
+
+To list all the docker images present in the Docker server
+----------------------------------------------------------
+docker images	
+
+To display detailed image information for a given image id
+----------------------------------------------------------
+docker image inspect image-id	
+
+To remove one or more images for a given image ids
+--------------------------------------------------
+docker image rm image-id	
+
+To push an image or a repository to a registry
+----------------------------------------------
+docker image push docker.io/eazybytes/accounts	
+
+To pull an image or a repository from a registry
+------------------------------------------------
+docker image pull docker.io/eazybytes/accounts
+
+To show all running containers
+------------------------------	
+docker ps	
+
+To show all containers including running and stopped
+----------------------------------------------------
+docker ps -a	
+
+To start one or more stopped containers
+---------------------------------------
+docker container start container-id
+
+To pause all processes within one or more containers
+----------------------------------------------------	
+docker container pause container-id	
+
+To unpause all processes within one or more containers
+------------------------------------------------------
+docker container unpause container-id	
+
+To stop one or more running containers
+-------------------------------------
+docker container stop container-id
+
+To kill one or more running containers instantly
+------------------------------------------------	
+docker container kill container-id	
+
+To restart one or more containers
+--------------------------------
+docker container restart container-id	
+
+To inspect all the details for a given container id
+---------------------------------------------------
+docker container inspect container-id	
+
+To fetch the logs of a given container id
+-----------------------------------------
+docker container logs container-id	
+
+To follow log output of a given container id
+--------------------------------------------
+docker container logs -f container-id	
+
+To remove one or more containers based on container ids
+------------------------------------------------------
+docker container rm container-id	
+
+To remove all stopped containers
+--------------------------------
+docker container prune
+
+To create and start containers based on given docker compose file
+-----------------------------------------------------------------	
+docker compose up	
+
+To stop services
+---------------
+docker compose stop	
